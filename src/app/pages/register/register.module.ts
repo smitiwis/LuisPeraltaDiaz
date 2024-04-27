@@ -4,10 +4,14 @@ import { RoutesRegisterModule } from './routes/RegisterRouting.module';
 import { RegisterComponent } from './register.component';
 import { SharedModule } from '../../components/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormProductComponent } from './components/form-product/form-product.component';
 
 
 @NgModule({
-  declarations: [RegisterComponent],
+  declarations: [
+    RegisterComponent,
+    FormProductComponent
+  ],
   imports: [
     CommonModule,
     RoutesRegisterModule,

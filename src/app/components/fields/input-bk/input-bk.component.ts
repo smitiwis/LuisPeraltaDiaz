@@ -4,7 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'input-bk',
   templateUrl: './input-bk.component.html',
-  styleUrls: ['./input-bk.component.css'],
+  styleUrls: ['./input-bk.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -28,7 +28,12 @@
               "src/assets/styles/lib/tailwind.scss",
               "src/assets/styles/index.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/styles"
+              ]
+            }
           },
           "configurations": {
             "production": {

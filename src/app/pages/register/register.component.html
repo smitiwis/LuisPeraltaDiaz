@@ -2,7 +2,7 @@
   <div
     class="separator-botton wrapper wrapper--title flex justify-between items-center"
   >
-    <span class="cursor-pointer">
+    <span class="cursor-pointer" routerLink="/">
       <img
         width="30"
         height="30"
@@ -14,59 +14,6 @@
     <span></span>
   </div>
   <div class="wrapper wrapper--form">
-    <!-- <FormProduct loading={false}/> -->
-
-    <form [formGroup]="miFormulario" (ngSubmit)="onSubmit()">
-      <div class="contenedor-fields">
-        <div class="wrapper-field">
-          <input-bk
-            formControlName="id"
-            label="ID*"
-            [error]="getErrorMessage('id')"
-          />
-        </div>
-        <div class="wrapper-field">
-          <input-bk
-            formControlName="name"
-            label="Nombre*"
-            [error]="getErrorMessage('name')"
-          />
-        </div>
-        <div class="wrapper-field">
-          <input-bk
-            formControlName="description"
-            label="Descripción*"
-            [error]="getErrorMessage('description')"
-          />
-        </div>
-        <div class="wrapper-field">
-          <input-bk
-            formControlName="logo"
-            label="Logo*"
-            [error]="getErrorMessage('logo')"
-          />
-        </div>
-        <div class="wrapper-field">
-          <input-bk
-            formControlName="date_release"
-            label="Fecha de liberación*"
-            type="date"
-            [error]="getErrorMessage('date_release')"
-          />
-        </div>
-        <div class="wrapper-field">
-          <input-bk
-            formControlName="date_revision"
-            label="Fecha de revición*"
-            type="date"
-            [error]="getErrorMessage('date_revision')"
-          />
-        </div>
-      </div>
-      <button class="btn btn--primary" type="submit">
-        <!-- [disabled]="!miFormulario.valid" -->
-        Enviar
-      </button>
-    </form>
+    <form-product />
   </div>
 </section>
