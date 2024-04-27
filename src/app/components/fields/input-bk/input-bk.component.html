@@ -1,0 +1,18 @@
+<label class="label-field">
+  @if(label !== ''){
+    <span>{{ label }}</span>
+  }
+  <input
+    class="input-field"
+    [type]="type"
+    [id]="formControlName"
+    [name]="formControlName"
+    [value]="value"
+    (input)="handleInputChange($event)"
+  />
+  @if(error !== ''){
+    <span class="text text--error">
+      {{ error }}
+    </span>
+  }
+</label>

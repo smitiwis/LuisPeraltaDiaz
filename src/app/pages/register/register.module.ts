@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RoutesRegisterModule } from './routes/RegisterRouting.module';
 import { RegisterComponent } from './register.component';
 import { SharedModule } from '../../components/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -10,7 +11,8 @@ import { SharedModule } from '../../components/shared.module';
   imports: [
     CommonModule,
     RoutesRegisterModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ]
 })
 export class RegisterModule { }
