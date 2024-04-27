@@ -4,7 +4,6 @@ import { EditComponent } from './edit.component';
 import { RoutesEditModule } from './routes/EditRouting.module';
 
 
-
 @NgModule({
   declarations: [EditComponent],
   imports: [

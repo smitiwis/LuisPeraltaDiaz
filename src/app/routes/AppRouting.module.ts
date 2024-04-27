@@ -2,8 +2,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 export const appRoutes: Routes = [
+
   {
-    path: 'home',
+    path: '',
     loadChildren: () =>
       import('../pages/home/home.module').then((m) => m.HomeModule),
   },
@@ -17,6 +18,11 @@ export const appRoutes: Routes = [
     loadChildren: () =>
       import('../pages/register/register.module').then((m) => m.RegisterModule),
   },
+    {
+    path: '',
+    redirectTo: '',
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
