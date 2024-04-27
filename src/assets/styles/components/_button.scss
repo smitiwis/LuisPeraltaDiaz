@@ -1,0 +1,83 @@
+.btn {
+  height: 2.5rem;
+  opacity: 1;
+  color: $c-text;
+  transition-duration: 0s;
+  background-color: $gray;
+  padding: 0 2.8rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 3px;
+  border: solid 1px $gray;
+  filter: brightness(1);
+  transition: all 0.4s;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  // ======= TIPOS DE BOTONES - PAGE =======
+  &--primary {
+    background: $c-primary;
+    border: solid 1px $c-primary;
+
+    &:hover {
+      background: $c-primary;
+      border: solid 1px $c-primary;
+    }
+  }
+
+  &--secondary {
+    background: $c-secondary;
+    border: solid 1px $c-secondary;
+
+    &:hover {
+      background: $c-secondary;
+      border: solid 1px $gray-dark;
+    }
+  }
+
+  &--delete{
+    background: $c-error;
+    border: solid 1px $c-error;
+    color: $white;
+
+    &:hover {
+      background-color: $c-error;
+    }
+  }
+
+  &--success{
+    background: $c-success;
+    border: solid 1px $c-success;
+
+    &:hover {
+      background-color: $c-success;
+    }
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.8;
+
+    &:hover,
+    &:focus,
+    &:active {
+      opacity: 0.8;
+    }
+  }
+
+  &--small{
+    font-weight: 400;
+    height: 1.5rem;
+    padding: 0.25rem 1rem;
+    font-size: 0.625rem;
+  }
+}
