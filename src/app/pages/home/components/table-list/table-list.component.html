@@ -1,0 +1,70 @@
+<table class="table-main">
+  <thead class="table-main__header">
+    <tr>
+      @for(column of COLUMNS; track column){
+      <th>
+        <div class="flex gap-2">
+          {{ column.name.toLocaleUpperCase() }}
+          @if(column.icon){
+          <img
+            width="15"
+            src="https://uxwing.com/wp-content/themes/uxwing/download/web-app-development/information-icon.png"
+            alt="as"
+          />
+          }
+        </div>
+      </th>
+      }
+    </tr>
+  </thead>
+  <tbody class="table-main__body">
+    <!-- @if(loading){
+      <squeleton-list></squeleton-list>
+    } -->
+    <ng-container *ngIf="loading()">
+      @for(row of ROWS; track row){
+      <tr>
+        @for(column of COLUMNS; track column){
+        <td>
+          <squeleton />
+        </td>
+        }
+      </tr>
+      }
+    </ng-container>
+
+    @for(product of products(); track product){
+    <tr>
+      <td>
+        <img [style.height.px]="45" [src]="product.logo" [alt]="product.logo" />
+      </td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.description }}</td>
+      <td>{{ formatDate(product.date_release) }}</td>
+      <td>{{ formatDate(product.date_revision) }}</td>
+      <td>
+        <div class="flex justify-center gap-x-2 w-[100%]">
+          <button class="btn btn--secondary btn--small">Editar</button>
+          <button class="btn btn--delete btn--small">Eliminar</button>
+        </div>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>
+
+<div class="flex justify-between items-center mt-4">
+  <p>
+    {{
+      products().length > 0
+        ? products().length + " resultados"
+        : "Calculando..."
+    }}
+  </p>
+
+  <select class="select-field">
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="20">20</option>
+  </select>
+</div>

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product_I } from '../interfaces/products';
 import { Observable } from 'rxjs';
@@ -17,9 +17,9 @@ export class ProductService {
     return this.http.post<Product_I>(this.url, body, { headers });
   }
 
-  getProducts(): Observable<Product_I[]> {
+  getProducts(): Observable<HttpResponse<Product_I[]>> {
     const headers = this.headers;
-    return this.http.get<Product_I[]>(this.url, { headers });
+    return this.http.get<Product_I[]>(this.url, { headers, observe: 'response'});
   }
 
   updateProduct(body: Product_I): Observable<Product_I[]> {

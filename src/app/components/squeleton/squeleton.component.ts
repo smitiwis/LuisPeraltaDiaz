@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './squeleton.component.scss'
 })
 export class SqueletonComponent {
-  @Input() height: number = 29;
+  @Input() height: number = 42;
 }

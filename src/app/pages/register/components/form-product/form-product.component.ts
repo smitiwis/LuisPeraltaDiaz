@@ -116,7 +116,6 @@ export class FormProductComponent {
 
   // ======== [DESUSCRIBIRSE DE LOS OBSERVABLES] ========
   ngOnDestroy(): void {
-    console.log('Se ha destruido el componente');
     if (this.productEvent) {
       this.productEvent.unsubscribe();
     }

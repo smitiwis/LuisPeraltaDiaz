@@ -1,1 +1,71 @@
-<h1 routerLink="/register" style="color: blue;">Hola home</h1>
+<section>
+  <div class="flex justify-between mb-3">
+    <input
+      class="input-field"
+      type="text"
+      placeholder="Search..."
+      onChange="{searchProduct}"
+    />
+    <button class="btn btn--primary" routerLink="/register">
+      <span class="text-lg">+</span> Agregar
+    </button>
+  </div>
+
+  <div class="wrapper-table">
+    <table-list />
+  </div>
+
+  <!-- ======= [ MODALES ]  =======-->
+
+  <!-- <ModalGeneric
+    showModal={showModal}
+    onCloseModal={onHandeleModal}
+    message={
+      <div class="mb-8">
+        ¿Estás seguro de eliminar el producto? <br />
+        <div class="flex flex-col items-center gap-1 mt-5 justify-center">
+          <img
+            width={100}
+            src={selectedProduct?.logo}
+            alt={selectedProduct?.name}
+          />
+          <span class="font-bold">{selectedProduct?.name}</span>
+        </div>
+      </div>
+    }
+  >
+    <div class="flex justify-between items-center gapx-4">
+      <button
+        class="btn btn--secondary"
+        onClick={onHandeleModal}
+        type="button"
+      >
+        Cancelar
+      </button>
+      <button
+        class="btn btn--primary"
+        onClick={goToDeleteProduct}
+        type="button"
+      >
+        Confirmar
+      </button>
+    </div>
+  </ModalGeneric>
+
+  <ModalGeneric
+    showModal={showModalError.show}
+    onCloseModal={onHandeleModalError}
+    size="small"
+    message={showModalError.message}
+  >
+    <div class="flex justify-between items-center gapx-4">
+      <button
+        class="btn btn--primary"
+        onClick={onHandeleModalError}
+        type="button"
+      >
+        Aceptar
+      </button>
+    </div>
+  </ModalGeneric> -->
+</section>
