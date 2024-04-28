@@ -33,8 +33,7 @@ export class FormProductComponent {
       return this.markAllControlsTouched(this.miFormulario);
     }
 
-    const data = { ...this.miFormulario.value };
-
+    const data = this.miFormulario.value;
     this.productEvent = this.productService.createProduct(data).subscribe({
       next: (product: Product_I) => {
         console.log(product);
@@ -46,15 +45,6 @@ export class FormProductComponent {
       complete: () => {
         console.log('Solicitud completada');
       },
-    });
-  }
-
-  protected markAllControlsTouched(formGroup: FormGroup): void {
-    Object.values(formGroup.controls).forEach((control) => {
-      control.markAsTouched();
-      if (control instanceof FormGroup) {
-        this.markAllControlsTouched(control);
-      }
     });
   }
 
@@ -72,6 +62,15 @@ export class FormProductComponent {
     });
   }
 
+  protected markAllControlsTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach((control) => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markAllControlsTouched(control);
+      }
+    });
+  }
+
   getErrorMessage(controlName: string): string {
     const control = this.miFormulario.get(controlName);
     if (control && control.invalid && control.touched) {
@@ -82,6 +81,17 @@ export class FormProductComponent {
       }
     }
     return '';
+  }
+
+  resetForm(): void {
+    this.miFormulario.patchValue({
+      id: '',
+      name: '',
+      description: '',
+      logo: '',
+      date_release: '',
+      date_revision: '',
+    });
   }
 
   // ======== [DESUSCRIBIRSE DE LOS OBSERVABLES] ========

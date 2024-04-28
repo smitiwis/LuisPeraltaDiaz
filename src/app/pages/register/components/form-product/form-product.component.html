@@ -45,8 +45,14 @@
       />
     </div>
   </div>
-  <button class="btn btn--primary" type="submit">
-    <!-- [disabled]="!miFormulario.valid" -->
-    Enviar
-  </button>
+  <div class="flex gap-5 justify-center mt-14">
+    <button class="btn btn--secondary" type="button" (click)="resetForm()">
+      <!-- [disabled]="!miFormulario.valid" -->
+      Reiniciar
+    </button>
+    <button class="btn btn--primary" type="submit">
+      <!-- [disabled]="!miFormulario.valid" -->
+      Enviar
+    </button>
+  </div>
 </form>
