@@ -5,6 +5,7 @@ import { RegisterComponent } from './register.component';
 import { SharedModule } from '../../components/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormProductComponent } from './components/form-product/form-product.component';
+import { provideHttpClient } from '@angular/common/http';
 
 
 @NgModule({
@@ -16,7 +17,10 @@ import { FormProductComponent } from './components/form-product/form-product.com
     CommonModule,
     RoutesRegisterModule,
     SharedModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+  ],
+  providers: [
+    provideHttpClient(),
+  ],
 })
 export class RegisterModule { }
