@@ -54,15 +54,9 @@
 </table>
 
 <div class="flex justify-between items-center mt-4">
-  <p>
-    {{
-      products().length > 0
-        ? products().length + " resultados"
-        : "Calculando..."
-    }}
-  </p>
+  <p>{{ descriptionResult() }}</p>
 
-  <select class="select-field">
+  <select class="select-field" [formControl]="selectValueControl">
     <option value="5">5</option>
     <option value="10">10</option>
     <option value="20">20</option>

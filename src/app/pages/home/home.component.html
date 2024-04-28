@@ -4,7 +4,7 @@
       class="input-field"
       type="text"
       placeholder="Search..."
-      onChange="{searchProduct}"
+      [formControl]="inputValueControl"
     />
     <button class="btn btn--primary" routerLink="/register">
       <span class="text-lg">+</span> Agregar
@@ -12,7 +12,7 @@
   </div>
 
   <div class="wrapper-table">
-    <table-list />
+    <table-list [productNameSearch]="productNameSearch()"/>
   </div>
 
   <!-- ======= [ MODALES ]  =======-->
