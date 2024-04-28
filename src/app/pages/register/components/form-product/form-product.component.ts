@@ -25,20 +25,10 @@ export class FormProductComponent {
   ) {}
 
   ngOnInit(): void {
-    this.miFormulario = this.formBuilder.group({
-      id: ['id-ejemplo-lp', [Validators.required, Validators.pattern(/-lp$/)]],
-      name: ['nombre', Validators.required],
-      description: ['description', Validators.required],
-      logo: [
-        'https://www.google.com',
-        [Validators.required, Validators.pattern('https?://.+')],
-      ],
-      date_release: ['2024-04-21', Validators.required],
-      date_revision: ['2024-04-21', Validators.required],
-    });
+    this.initForm();
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (!this.miFormulario.valid) {
       return this.markAllControlsTouched(this.miFormulario);
     }
@@ -59,12 +49,26 @@ export class FormProductComponent {
     });
   }
 
-  protected markAllControlsTouched(formGroup: FormGroup) {
+  protected markAllControlsTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
       if (control instanceof FormGroup) {
         this.markAllControlsTouched(control);
       }
+    });
+  }
+
+  protected initForm(): void {
+    this.miFormulario = this.formBuilder.group({
+      id: ['id-ejemplo-lp', [Validators.required, Validators.pattern(/-lp$/)]],
+      name: ['nombre', Validators.required],
+      description: ['description', Validators.required],
+      logo: [
+        'https://www.google.com',
+        [Validators.required, Validators.pattern('https?://.+')],
+      ],
+      date_release: ['2024-04-21', Validators.required],
+      date_revision: ['2024-04-21', Validators.required],
     });
   }
 
@@ -80,7 +84,7 @@ export class FormProductComponent {
     return '';
   }
 
-  // DESUSCRIBIRSE DE LOS OBSERVABLES
+  // ======== [DESUSCRIBIRSE DE LOS OBSERVABLES] ========
   ngOnDestroy(): void {
     if (this.productEvent) {
       this.productEvent.unsubscribe();

@@ -7,12 +7,28 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ProductService {
+  headers = new HttpHeaders({ authorId: 428 });
+  url = `https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros/bp/products`;
+
   constructor(private http: HttpClient) {}
 
   createProduct(body: Product_I): Observable<Product_I> {
-    const headers = new HttpHeaders({ authorId: 428 });
-    const url = `https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros/bp/products`;
+    const headers = this.headers;
+    return this.http.post<Product_I>(this.url, body, { headers });
+  }
 
-    return this.http.post<Product_I>(url, body, { headers });
+  getProducts(): Observable<Product_I[]> {
+    const headers = this.headers;
+    return this.http.get<Product_I[]>(this.url, { headers });
+  }
+
+  updateProduct(body: Product_I): Observable<Product_I[]> {
+    const headers = this.headers;
+    return this.http.put<Product_I[]>(this.url, body, { headers });
+  }
+
+  deleteProductById(id: string): Observable<Product_I[]> {
+    const headers = this.headers;
+    return this.http.delete<Product_I[]>(`${this.url}?id=${id}`, { headers });
   }
 }
