@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, ElementRef, forwardRef, Input, signal, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -13,10 +13,27 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class InputBkComponent implements ControlValueAccessor {
+  @ViewChild('inputRef') inputRef!: ElementRef;
+
   @Input() formControlName = '';
   @Input() error = '';
   @Input() type = '';
   @Input() label = '';
+  @Input() set focus(value: boolean) {
+    if (value) {
+      this.setFocusInput();
+    }
+  }
+  @Input() set disabled(value: boolean){
+    this.disabledInput.set(value);
+  };
+  @Input() set loading(value: boolean) {
+    this.loadingInput.set(value);
+  };
+
+  // SIÑALES
+  loadingInput = signal(false);
+  disabledInput = signal(false);
 
   protected value: any = '';
 
@@ -34,6 +51,11 @@ export class InputBkComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     // this.onTouched = fn;
+  }
+
+  setFocusInput(): void {
+
+    this.inputRef.nativeElement.focus();
   }
 
 

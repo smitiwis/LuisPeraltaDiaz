@@ -2,14 +2,21 @@
   @if(label !== ''){
     <span>{{ label }}</span>
   }
-  <input
-    class="input-field"
-    [type]="type"
-    [id]="formControlName"
-    [name]="formControlName"
-    [value]="value"
-    (input)="handleInputChange($event)"
-  />
+
+  @if(loadingInput()){
+    <squeleton />
+  } @else {
+    <input
+      #inputRef
+      class="input-field"
+      [type]="type"
+      [id]="formControlName"
+      [name]="formControlName"
+      [value]="value"
+      (input)="handleInputChange($event)"
+      [disabled]="disabledInput()"
+    />
+  }
   @if(error !== ''){
     <span class="text text--error">
       {{ error }}

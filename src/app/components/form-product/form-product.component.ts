@@ -45,6 +45,9 @@ export class FormProductComponent {
   // SEÑALES
   loadingForm = signal(false);
   isFormToEdit = signal(false);
+  focusFirtInput = signal(false);
+  focusSecondInput = signal(false);
+  focusInput = signal(false);
 
   // INYECCION DE DEPENDENCIAS
   formBuilder = inject(FormBuilder);
@@ -162,13 +165,19 @@ export class FormProductComponent {
 
   resetForm(): void {
     this.miFormulario.patchValue({
-      id: '',
+      id: this.isFormToEdit() ? this.miFormulario.value.id : '',
       name: '',
       description: '',
       logo: '',
       date_release: '',
       date_revision: '',
     });
+
+    if (this.isFormToEdit()) {
+      this.focusSecondInput.set(true);
+    } else {
+      this.focusFirtInput.set(true);
+    }
   }
 
   // ======== [DESUSCRIBIRSE DE LOS OBSERVABLES] ========

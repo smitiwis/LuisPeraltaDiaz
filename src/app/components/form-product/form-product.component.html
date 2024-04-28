@@ -5,6 +5,9 @@
         formControlName="id"
         label="ID*"
         [error]="getErrorMessage('id')"
+        [loading]="loadingForm()"
+        [disabled]="isFormToEdit()"
+        [focus]="focusFirtInput()"
       />
     </div>
     <div class="wrapper-field">
@@ -12,6 +15,8 @@
         formControlName="name"
         label="Nombre*"
         [error]="getErrorMessage('name')"
+        [loading]="loadingForm()"
+        [focus]="focusSecondInput()"
       />
     </div>
     <div class="wrapper-field">
@@ -19,6 +24,7 @@
         formControlName="description"
         label="Descripción*"
         [error]="getErrorMessage('description')"
+        [loading]="loadingForm()"
       />
     </div>
     <div class="wrapper-field">
@@ -26,6 +32,7 @@
         formControlName="logo"
         label="Logo*"
         [error]="getErrorMessage('logo')"
+        [loading]="loadingForm()"
       />
     </div>
     <div class="wrapper-field">
@@ -34,6 +41,7 @@
         label="Fecha de liberación*"
         type="date"
         [error]="getErrorMessage('date_release')"
+        [loading]="loadingForm()"
       />
     </div>
     <div class="wrapper-field">
@@ -42,18 +50,24 @@
         label="Fecha de revición*"
         type="date"
         [error]="getErrorMessage('date_revision')"
+        [loading]="loadingForm()"
       />
     </div>
   </div>
   <div class="flex gap-5 justify-center mt-14">
-    <button class="btn btn--secondary" type="button" (click)="resetForm()">
-      <!-- [disabled]="!miFormulario.valid" -->
-      Reiniciar
-    </button>
-    <button class="btn btn--primary" type="submit">
-      <!-- [disabled]="!miFormulario.valid" -->
-      {{ this.isFormToEdit() ? "Actualizar" : "Enviar" }}
-    </button>
+    @if(loadingForm()){
+      <squeleton [width]="150"/>
+      <squeleton [width]="150"/>
+    } @else{
+      <button class="btn btn--secondary" type="button" (click)="resetForm()">
+        <!-- [disabled]="!miFormulario.valid" -->
+        Reiniciar
+      </button>
+      <button class="btn btn--primary" type="submit">
+        <!-- [disabled]="!miFormulario.valid" -->
+        {{ this.isFormToEdit() ? "Actualizar" : "Enviar" }}
+      </button>
+    }
   </div>
 </form>
 
