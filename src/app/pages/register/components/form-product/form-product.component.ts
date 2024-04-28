@@ -1,9 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Product_I } from '../../../../interfaces/products';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ERROR_MESSAGES } from '../../../../components/fields/input-bk/constants';
 import { ProductService } from '../../../../services/services.service';
 import { Subscription } from 'rxjs';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'form-product',
@@ -11,17 +13,20 @@ import { Subscription } from 'rxjs';
   providers: [ProductService],
 })
 export class FormProductComponent {
+  @ViewChild('deleteSwal') sweetAlert!: SwalComponent;
+
   @Input() product!: Product_I;
   @Input() loadgin = false;
+
+  productEvent!: Subscription;
 
   miFormulario!: FormGroup;
   errorMessages = ERROR_MESSAGES;
 
-  productEvent!: Subscription;
-
   constructor(
     private formBuilder: FormBuilder,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -36,11 +41,26 @@ export class FormProductComponent {
     const data = this.miFormulario.value;
     this.productEvent = this.productService.createProduct(data).subscribe({
       next: (product: Product_I) => {
-        console.log(product);
+        this.sweetAlert.title = '¡Producto creado!';
+        this.sweetAlert.text = '';
+        this.sweetAlert.showConfirmButton = false;
+        this.sweetAlert.icon = 'success';
+        this.sweetAlert.timer = 1500;
+        this.sweetAlert.fire().then((result) => {
+          this.router.navigate(['/']);
+        });
       },
       error: (error: any) => {
-        const messageErrorJSON = JSON.stringify({ message: error.error });
-        const messageError = JSON.parse(messageErrorJSON);
+        const message = error.error.includes('duplicate')
+          ? "El producto 'ID' ya esta registrado."
+          : 'No estas autorizado para realizar esta acción.';
+
+        this.sweetAlert.title = '¡Ups! Algo salió mal.';
+        this.sweetAlert.text = message;
+        this.sweetAlert.showConfirmButton = true;
+        this.sweetAlert.icon = 'error';
+        this.sweetAlert.timer = 2000;
+        this.sweetAlert.fire();
       },
       complete: () => {
         console.log('Solicitud completada');
@@ -96,6 +116,7 @@ export class FormProductComponent {
 
   // ======== [DESUSCRIBIRSE DE LOS OBSERVABLES] ========
   ngOnDestroy(): void {
+    console.log('Se ha destruido el componente');
     if (this.productEvent) {
       this.productEvent.unsubscribe();
     }
