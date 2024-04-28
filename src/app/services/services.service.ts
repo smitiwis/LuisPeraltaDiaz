@@ -22,9 +22,9 @@ export class ProductService {
     return this.http.get<Product_I[]>(this.url, { headers, observe: 'response'});
   }
 
-  updateProduct(body: Product_I): Observable<Product_I[]> {
+  updateProduct(body: Product_I): Observable<Product_I> {
     const headers = this.headers;
-    return this.http.put<Product_I[]>(this.url, body, { headers });
+    return this.http.put<Product_I>(this.url, body, { headers });
   }
 
   deleteProductById(id: string): Observable<Product_I[]> {

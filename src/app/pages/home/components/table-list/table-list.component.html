@@ -44,7 +44,9 @@
       <td>{{ formatDate(product.date_revision) }}</td>
       <td>
         <div class="flex justify-center gap-x-2 w-[100%]">
-          <button class="btn btn--secondary btn--small">Editar</button>
+          <button class="btn btn--secondary btn--small" [routerLink]="'/edit/'+ product.id">
+            Editar
+          </button>
           <button class="btn btn--delete btn--small">Eliminar</button>
         </div>
       </td>

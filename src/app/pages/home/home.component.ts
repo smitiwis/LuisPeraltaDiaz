@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subscription, debounceTime } from 'rxjs';
+import { Observable, Subscription, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -8,8 +8,10 @@ import { Subscription, debounceTime } from 'rxjs';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  // EVENTOS
   inputValueControl: FormControl = new FormControl('');
-  valueChangesSubscription!: Subscription;
+  inputChangesEvent!: Subscription;
+  inputChanges$!: Observable<string>;
 
   inputValue: string = '';
 
@@ -19,10 +21,22 @@ export class HomeComponent {
   constructor() {}
 
   ngOnInit(): void {
-    this.valueChangesSubscription = this.inputValueControl.valueChanges
+    this.handleSelect();
+  }
+
+  handleSelect(): void {
+    this.inputChanges$ = this.inputValueControl.valueChanges;
+    this.inputChangesEvent = this.inputChanges$
       .pipe(debounceTime(350))
       .subscribe((value) => {
         this.productNameSearch.set(value);
       });
+  }
+
+  // DESTRUCCION DE SUSCRIPCIONES
+  ngOnDestroy(): void {
+    if (this.inputChangesEvent) {
+      this.inputChangesEvent.unsubscribe();
+    }
   }
 }

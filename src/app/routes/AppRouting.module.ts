@@ -9,7 +9,7 @@ export const appRoutes: Routes = [
       import('../pages/home/home.module').then((m) => m.HomeModule),
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     loadChildren: () =>
       import('../pages/edit/edit.module').then((m) => m.EditModule),
   },

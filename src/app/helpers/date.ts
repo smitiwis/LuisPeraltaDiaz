@@ -1,16 +1,6 @@
 export const formatDateHelper = (dateString: string): string => {
-  const date = new Date(dateString);
-
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  // Formatear la fecha en el formato deseado (DD-MM-YYYY)
-  const formattedDate = `${day < 10 ? '0' + day : day}-${
-    month < 10 ? '0' + month : month
-  }-${year}`;
-
-  return formattedDate;
+  const dateRelease = new Date(dateString);
+  return dateRelease.toISOString().substring(0, 10);
 };
 
 export const clearWord = (palabra: string): string => {
