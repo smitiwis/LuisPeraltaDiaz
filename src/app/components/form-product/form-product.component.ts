@@ -70,7 +70,6 @@ export class FormProductComponent {
         next: (product: Product_I) => {
           this.sweetAlert.title = '¡Producto creado!';
           this.sweetAlert.text = '';
-          this.sweetAlert.showConfirmButton = false;
           this.sweetAlert.icon = 'success';
           this.sweetAlert.timer = 1500;
           this.sweetAlert.fire().then((result) => {
@@ -84,7 +83,6 @@ export class FormProductComponent {
 
           this.sweetAlert.title = '¡Ups! Algo salió mal.';
           this.sweetAlert.text = message;
-          this.sweetAlert.showConfirmButton = true;
           this.sweetAlert.icon = 'error';
           this.sweetAlert.timer = 2000;
           this.sweetAlert.fire();
@@ -97,7 +95,6 @@ export class FormProductComponent {
         next: (product: Product_I) => {
           this.sweetAlert.title = '¡Producto actualizado!';
           this.sweetAlert.text = '';
-          this.sweetAlert.showConfirmButton = false;
           this.sweetAlert.icon = 'success';
           this.sweetAlert.timer = 1500;
           this.sweetAlert.fire().then((result) => {
@@ -106,12 +103,11 @@ export class FormProductComponent {
         },
         error: (error: any) => {
           const message = error.error.includes('duplicate')
-            ? "El producto 'ID' ya esta registrado."
+            ? "El 'ID' ya está registrado."
             : 'No estas autorizado para realizar esta acción.';
 
           this.sweetAlert.title = '¡Ups! Algo salió mal.';
           this.sweetAlert.text = message;
-          this.sweetAlert.showConfirmButton = true;
           this.sweetAlert.icon = 'error';
           this.sweetAlert.timer = 2000;
           this.sweetAlert.fire();
