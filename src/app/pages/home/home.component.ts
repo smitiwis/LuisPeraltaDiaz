@@ -21,15 +21,15 @@ export class HomeComponent {
   constructor() {}
 
   ngOnInit(): void {
-    this.handleSelect();
+    this.handleInputToSearch();
   }
 
-  handleSelect(): void {
+  handleInputToSearch(): void {
     this.inputChanges$ = this.inputValueControl.valueChanges;
     this.inputChangesEvent = this.inputChanges$
       .pipe(debounceTime(350))
       .subscribe((value) => {
-        this.productNameSearch.set(value);
+        this.productNameSearch.set(value.trim());
       });
   }
 
