@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
 
-import { RoutesRegisterModule } from './routes/RegisterRouting.module';
-import { SharedModule } from '../../components/shared.module';
+import { SharedModule } from '@components/shared.module';
+import { productInterceptor } from '@interceptors/interceptor-product';
 
 import { RegisterComponent } from './register.component';
-import { productInterceptor } from '../../interceptors/interceptor-product';
+import { RoutesRegisterModule } from './routes/RegisterRouting.module';
+
+
 
 @NgModule({
   declarations: [

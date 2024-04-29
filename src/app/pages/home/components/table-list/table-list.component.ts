@@ -1,16 +1,15 @@
 import { Component, Input, ViewChild, inject, signal } from '@angular/core';
-
-import {
-  COLUMNS_LIST,
-  NUM_ROWS_SQUELETON,
-} from '../../../../constants/table-list';
-import { ProductService } from '../../../../services/services.service';
-import { Product_I } from '../../../../interfaces/products';
-import { Observable, Subscription, catchError, delay, of } from 'rxjs';
-import { clearWord, formatDateHelper } from '../../../../helpers/date';
 import { HttpResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
+
+import { Observable, Subscription, catchError, of } from 'rxjs';
+
 import { SwalComponent, SwalPortalTargets } from '@sweetalert2/ngx-sweetalert2';
+
+import { COLUMNS_LIST, NUM_ROWS_SQUELETON } from '@constants/table-list';
+import { clearWord, formatDateHelper } from '@helpers/date';
+import { ProductService } from '@services/services.service';
+import { Product_I } from '@interfaces/products';
 
 @Component({
   selector: 'table-list',
@@ -109,11 +108,11 @@ export class TableListComponent {
 
   descriptionResult(): string {
     if (this.loading()) {
-      return 'Calculando...';
+      return 'Espere un momento porfavor.';
     }
 
     if (this.products().length === 0) {
-      return `No se encontraron resultados para "${this.wordSearch()}"`;
+      return `No se encontraron resultados.`;
     }
 
     if (this.products().length > 1) {

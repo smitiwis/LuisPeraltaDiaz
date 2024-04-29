@@ -1,13 +1,17 @@
 import { Component, Input, ViewChild, inject, signal } from '@angular/core';
-import { Product_I } from '../../interfaces/products';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ERROR_MESSAGES } from '../fields/input-bk/constants';
-import { ProductService } from '../../services/services.service';
-import { Observable, Subscription, catchError, of } from 'rxjs';
-import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { Router } from '@angular/router';
-import { formatDateHelper } from '../../helpers/date';
 import { HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+
+import { Observable, Subscription, catchError, of } from 'rxjs';
+
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+
+import { ERROR_MESSAGES } from '@components/fields/input-bk/constants';
+import { ProductService } from '@services/services.service';
+import { Product_I } from '@interfaces/products';
+import { formatDateHelper } from '@helpers/date';
+
 
 @Component({
   selector: 'form-product',
@@ -68,7 +72,7 @@ export class FormProductComponent {
         .subscribe((resp) => {
           if (resp.status === 200) {
             this.modalCreateSuccess.fire();
-            this.modalUpdateSuccess.fire().then((result) => {
+            this.modalUpdateSuccess.fire().then(() => {
               this.router.navigate(['/']);
             });
           } else {
@@ -83,7 +87,7 @@ export class FormProductComponent {
         .subscribe((resp) => {
           if (resp.status === 200) {
             this.modalCreateSuccess.fire();
-            this.modalCreateSuccess.fire().then((result) => {
+            this.modalCreateSuccess.fire().then(() => {
               this.router.navigate(['/']);
             });
           } else {
@@ -99,7 +103,7 @@ export class FormProductComponent {
       id: ['', [Validators.required, Validators.pattern(/-lp$/)]],
       name: ['', Validators.required],
       description: ['', Validators.required],
-      logo: ['', [Validators.required, Validators.pattern('https?://.+')]],
+      logo: ['https://', [Validators.required, Validators.pattern('https?://.+')]],
       date_release: ['', Validators.required],
       date_revision: ['', Validators.required],
     });
@@ -142,7 +146,7 @@ export class FormProductComponent {
       id: this.isFormToEdit() ? this.miFormulario.value.id : '',
       name: '',
       description: '',
-      logo: '',
+      logo: 'https://',
       date_release: '',
       date_revision: '',
     });

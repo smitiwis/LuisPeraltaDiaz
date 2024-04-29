@@ -2,6 +2,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@interfaces/*": ["src/app/interfaces/*"],
+      "@fields/*": ["src/app/fields/*"],
+      "@services/*": ["src/app/services/*"],
+      "@helpers/*": ["src/app/helpers/*"],
+      "@constants/*": ["src/app/constants/*"],
+      "@pages/*": ["src/app/pages/*"],
+      "@components/*": ["src/app/components/*"],
+      "@interceptors/*": ["src/app/interceptors/*"]
+    },
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,

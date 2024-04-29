@@ -1,9 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Observable, Subscription, delay } from 'rxjs';
-import { Product_I } from '../../interfaces/products';
-import { ProductService } from '../../services/services.service';
+import { Observable, Subscription } from 'rxjs';
+
+import { Product_I } from '@interfaces/products';
+import { ProductService } from '@services/services.service';
 
 @Component({
   selector: 'app-edit',

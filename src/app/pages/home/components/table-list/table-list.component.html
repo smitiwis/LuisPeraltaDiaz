@@ -36,14 +36,14 @@
     @for(product of products(); track product){
     <tr>
       <td>
-        <img [style.height.px]="45" [src]="product.logo" [alt]="product.logo" />
+        <img [style.height.px]="45" [src]="product.logo" [alt]="product.name" />
       </td>
       <td>{{ product.name }}</td>
       <td>{{ product.description }}</td>
       <td>{{ formatDate(product.date_release) }}</td>
       <td>{{ formatDate(product.date_revision) }}</td>
       <td>
-        <div class="flex justify-center gap-x-2 w-[100%]">
+        <div class="flex gap-x-2 w-[100%]">
           <button
             class="btn btn--secondary btn--small"
             [routerLink]="'/edit/' + product.id"

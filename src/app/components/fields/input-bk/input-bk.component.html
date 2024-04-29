@@ -9,6 +9,7 @@
     <input
       #inputRef
       class="input-field"
+      [ngClass]="{'input-field--error': !!error }"
       [type]="type"
       [id]="formControlName"
       [name]="formControlName"

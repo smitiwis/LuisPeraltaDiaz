@@ -5,6 +5,7 @@ import { ContainerMainComponent } from './layouts/container-main/container-main.
 import { LayoutMainComponent } from './layouts/layout-main/layout-main.component';
 import { SqueletonComponent } from './squeleton/squeleton.component';
 
+
 export const SHARED_COMPONENTS = [
   HeaderComponent,
   ContainerMainComponent,
