@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormProductComponent } from './form-product.component';
+import { SharedModule } from '@components/shared.module';
 
 describe('FormProductComponent', () => {
   let component: FormProductComponent;
@@ -8,7 +9,8 @@ describe('FormProductComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormProductComponent]
+      imports: [SharedModule],
+      declarations: [FormProductComponent]
     })
     .compileComponents();
     

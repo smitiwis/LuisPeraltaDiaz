@@ -1,5 +1,5 @@
+import { SharedModule } from '@components/shared.module';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
@@ -8,10 +8,10 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
-    })
-    .compileComponents();
-    
+      imports: [SharedModule], // Importa el SharedModule que contiene HeaderComponent
+      declarations: [HeaderComponent], // Declara el componente que estás probando
+    }).compileComponents();
+
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SqueletonComponent } from './squeleton.component';
+import { SharedModule } from '@components/shared.module';
 
 describe('SqueletonComponent', () => {
   let component: SqueletonComponent;
@@ -8,7 +9,8 @@ describe('SqueletonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SqueletonComponent]
+      imports: [SharedModule],
+      declarations: [SqueletonComponent]
     })
     .compileComponents();
     

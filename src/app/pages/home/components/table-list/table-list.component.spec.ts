@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TableListComponent } from './table-list.component';
+import { HomeModule } from '@pages/home/home.module';
 
 describe('TableListComponent', () => {
   let component: TableListComponent;
@@ -8,10 +9,10 @@ describe('TableListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TableListComponent]
-    })
-    .compileComponents();
-    
+      imports: [HomeModule],
+      declarations: [TableListComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TableListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

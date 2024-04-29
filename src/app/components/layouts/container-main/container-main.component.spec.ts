@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContainerMainComponent } from './container-main.component';
-
+import { SharedModule } from '@components/shared.module';
 
 describe('ContainerMainComponent', () => {
   let component: ContainerMainComponent;
@@ -8,10 +8,10 @@ describe('ContainerMainComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContainerMainComponent]
-    })
-    .compileComponents();
-    
+      imports: [SharedModule], // Importa el SharedModule que contiene ContainerMainComponent
+      declarations: [ContainerMainComponent], // Declara el componente que estás probando
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ContainerMainComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
