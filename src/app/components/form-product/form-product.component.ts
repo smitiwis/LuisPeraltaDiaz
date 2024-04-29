@@ -117,12 +117,12 @@ export class FormProductComponent {
   }
 
   onSubmit() {
-    this.loadginButton.set(true);
     if (!this.formProduct.valid) {
       return this.markAllControlsTouched(this.formProduct);
     }
+    
     const data = this.formProduct.value;
-
+    this.loadginButton.set(true);
     if (this.isFormToEdit()) {
       this.product$ = this.productService.updateProduct(data);
       this.productEvent = this.product$
