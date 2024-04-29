@@ -56,29 +56,43 @@
   </div>
   <div class="flex gap-5 justify-center mt-14">
     @if(loadingForm()){
-      <squeleton [width]="150"/>
-      <squeleton [width]="150"/>
+    <squeleton [width]="150" />
+    <squeleton [width]="150" />
     } @else{
-      <button class="btn btn--secondary" type="button" (click)="resetForm()">
-        <!-- [disabled]="!miFormulario.valid" -->
-        Reiniciar
-      </button>
-      <button class="btn btn--primary" type="submit">
-        <!-- [disabled]="!miFormulario.valid" -->
-        {{ this.isFormToEdit() ? "Actualizar" : "Enviar" }}
-      </button>
+    <button class="btn btn--secondary" type="button" (click)="resetForm()">
+      Reiniciar
+    </button>
+    <button class="btn btn--primary" type="submit">
+      {{ this.isFormToEdit() ? "Actualizar" : "Enviar" }}
+    </button>
     }
   </div>
 </form>
 
 <!-- MODALES -->
 <swal
-  #modalRef
+  #modalCreateSuccessRef
   title="¡Producto creado!"
   text=" "
   icon="success"
-  confirmButtonText="Aceptar"
+  [timer]="1500"
+  [showConfirmButton]="false"
+/>
+
+<swal
+  #modalErrorRef
+  title="¡Ups! Algo salió mal."
+  text=" "
+  icon="error"
   [timer]="2000"
   [showConfirmButton]="false"
->
-</swal>
+/>
+
+<swal
+  #modalUpdateSuccessRef
+  title="¡Producto actualizado!"
+  text=" "
+  icon="success"
+  [timer]="1500"
+  [showConfirmButton]="false"
+/>

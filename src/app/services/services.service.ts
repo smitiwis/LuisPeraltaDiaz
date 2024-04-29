@@ -12,8 +12,8 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  createProduct(body: Product_I): Observable<Product_I> {
-    return this.http.post<Product_I>(this.url, body);
+  createProduct(body: Product_I): Observable<HttpResponse<Product_I>> {
+    return this.http.post<Product_I>(this.url, body, { observe: 'response' });
   }
 
   getProducts(): Observable<HttpResponse<Product_I[]>> {
@@ -22,8 +22,8 @@ export class ProductService {
     });
   }
 
-  updateProduct(body: Product_I): Observable<Product_I> {
-    return this.http.put<Product_I>(this.url, body);
+  updateProduct(body: Product_I): Observable<HttpResponse<Product_I>> {
+    return this.http.put<Product_I>(this.url, body, { observe: 'response' });
   }
 
   deleteProductById(id: string): Observable<HttpResponse<Product_I[]>> {

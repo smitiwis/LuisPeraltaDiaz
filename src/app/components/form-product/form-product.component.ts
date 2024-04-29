@@ -1,19 +1,13 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  ViewChild,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, Input, ViewChild, inject, signal } from '@angular/core';
 import { Product_I } from '../../interfaces/products';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ERROR_MESSAGES } from '../fields/input-bk/constants';
 import { ProductService } from '../../services/services.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, catchError, of } from 'rxjs';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { Router } from '@angular/router';
 import { formatDateHelper } from '../../helpers/date';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'form-product',
@@ -22,7 +16,10 @@ import { formatDateHelper } from '../../helpers/date';
 })
 export class FormProductComponent {
   // ENTRADAS Y SALIDAS DEL COMPONENTE
-  @ViewChild('modalRef') sweetAlert!: SwalComponent;
+  @ViewChild('modalCreateSuccessRef') modalCreateSuccess!: SwalComponent;
+  @ViewChild('modalErrorRef') modalError!: SwalComponent;
+  @ViewChild('modalUpdateSuccessRef') modalUpdateSuccess!: SwalComponent;
+
   @Input() set productToEdit(value: Product_I | null) {
     if (value !== null) {
       this.isFormToEdit.set(true);
@@ -36,7 +33,7 @@ export class FormProductComponent {
 
   // EVENTOS
   productEvent!: Subscription;
-  product$!: Observable<Product_I>;
+  product$!: Observable<HttpResponse<Product_I>>;
 
   // FORMULARIO
   miFormulario!: FormGroup;
@@ -58,61 +55,42 @@ export class FormProductComponent {
     this.initForm();
   }
 
-  onSubmit(): void {
+  onSubmit() {
     if (!this.miFormulario.valid) {
       return this.markAllControlsTouched(this.miFormulario);
     }
     const data = this.miFormulario.value;
 
-    if (!this.isFormToEdit()) {
-      this.product$ = this.productService.createProduct(data);
-      this.productEvent = this.product$.subscribe({
-        next: (product: Product_I) => {
-          this.sweetAlert.title = '¡Producto creado!';
-          this.sweetAlert.text = '';
-          this.sweetAlert.icon = 'success';
-          this.sweetAlert.timer = 1500;
-          this.sweetAlert.fire().then((result) => {
-            this.router.navigate(['/']);
-          });
-        },
-        error: (error: any) => {
-          const message = error.error.includes('duplicate')
-            ? "El producto 'ID' ya esta registrado."
-            : 'No estas autorizado para realizar esta acción.';
-
-          this.sweetAlert.title = '¡Ups! Algo salió mal.';
-          this.sweetAlert.text = message;
-          this.sweetAlert.icon = 'error';
-          this.sweetAlert.timer = 2000;
-          this.sweetAlert.fire();
-        },
-      });
-    } else {
-      // ACTUALIZAR PRODUCTO
+    if (this.isFormToEdit()) {
       this.product$ = this.productService.updateProduct(data);
-      this.productEvent = this.product$.subscribe({
-        next: (product: Product_I) => {
-          this.sweetAlert.title = '¡Producto actualizado!';
-          this.sweetAlert.text = '';
-          this.sweetAlert.icon = 'success';
-          this.sweetAlert.timer = 1500;
-          this.sweetAlert.fire().then((result) => {
-            this.router.navigate(['/']);
-          });
-        },
-        error: (error: any) => {
-          const message = error.error.includes('duplicate')
-            ? "El 'ID' ya está registrado."
-            : 'No estas autorizado para realizar esta acción.';
-
-          this.sweetAlert.title = '¡Ups! Algo salió mal.';
-          this.sweetAlert.text = message;
-          this.sweetAlert.icon = 'error';
-          this.sweetAlert.timer = 2000;
-          this.sweetAlert.fire();
-        },
-      });
+      this.productEvent = this.product$
+        .pipe(catchError((err) => of(err)))
+        .subscribe((resp) => {
+          if (resp.status === 200) {
+            this.modalCreateSuccess.fire();
+            this.modalUpdateSuccess.fire().then((result) => {
+              this.router.navigate(['/']);
+            });
+          } else {
+            this.modalError.text = resp.error;
+            this.modalError.fire();
+          }
+        });
+    } else {
+      this.product$ = this.productService.createProduct(data);
+      this.productEvent = this.product$
+        .pipe(catchError((err) => of(err)))
+        .subscribe((resp) => {
+          if (resp.status === 200) {
+            this.modalCreateSuccess.fire();
+            this.modalCreateSuccess.fire().then((result) => {
+              this.router.navigate(['/']);
+            });
+          } else {
+            this.modalError.text = resp.error;
+            this.modalError.fire();
+          }
+        });
     }
   }
 
