@@ -10,7 +10,14 @@ import {
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { Observable, Subscription, catchError, of } from 'rxjs';
+import {
+  Observable,
+  Subscription,
+  catchError,
+  debounceTime,
+  map,
+  of,
+} from 'rxjs';
 
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 
@@ -44,6 +51,10 @@ export class FormProductComponent {
   // EVENTOS
   productEvent!: Subscription;
   product$!: Observable<HttpResponse<Product_I>>;
+  productExistEvent!: Subscription;
+  existProduct$!: Observable<HttpResponse<boolean>>;
+  inputIdEvent!: Subscription;
+  inputId$!: Observable<string>;
 
   // FORMULARIO
   formProduct!: FormGroup;
@@ -55,6 +66,7 @@ export class FormProductComponent {
   focusFirtInput = signal(false);
   focusSecondInput = signal(false);
   focusInput = signal(false);
+  messageErrorInputId = signal('');
 
   // INYECCION DE DEPENDENCIAS
   formBuilder = inject(FormBuilder);
@@ -63,6 +75,43 @@ export class FormProductComponent {
 
   ngOnInit(): void {
     this.initForm();
+    this.subscribeToFormChanges();
+  }
+
+  subscribeToFormChanges(): void {
+    const idControl = this.formProduct.get('id');
+    if (idControl) {
+      this.inputId$ = idControl.valueChanges.pipe(
+        map((id: string) => {
+          this.messageErrorInputId.set('');
+          return id;
+        }),
+        debounceTime(1000)
+      );
+
+      this.inputIdEvent = this.inputId$.subscribe((id: string) => {
+        if (!this.isFormToEdit() && id.length > 3) {
+          this.existProductById(id);
+        }
+      });
+    }
+  }
+
+  existProductById(id: string): void {
+    this.existProduct$ = this.productService.existProductById(id);
+    this.productExistEvent = this.existProduct$
+      .pipe(catchError((err) => of(err)))
+      .subscribe((resp) => {
+        if (resp.status === 200) {
+          const existProduct = resp.body;
+          const getMessageError = this.getErrorMessage('id', existProduct);
+          this.messageErrorInputId.set(getMessageError);
+        } else {
+          this.modalError.text = '';
+          this.modalError.fire();
+        }
+        this.productExistEvent.unsubscribe();
+      });
   }
 
   onSubmit() {
@@ -106,7 +155,15 @@ export class FormProductComponent {
 
   initForm(): void {
     this.formProduct = this.formBuilder.group({
-      id: ['', [Validators.required, Validators.pattern(/-lp$/)]],
+      id: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(10),
+          Validators.pattern(/^[^\s]*$/),
+        ],
+      ],
       name: [
         '',
         [
@@ -137,7 +194,9 @@ export class FormProductComponent {
   }
 
   customDateReleaseValidator(): ValidatorFn {
-    return (formGroup: AbstractControl): Observable<ValidationErrors | null> => {
+    return (
+      formGroup: AbstractControl
+    ): Observable<ValidationErrors | null> => {
       const dateReleaseControl = formGroup;
 
       if (!dateReleaseControl) return of(null);
@@ -161,7 +220,7 @@ export class FormProductComponent {
         return of(null);
       }
 
-      this.formProduct.patchValue({date_revision: ''});
+      this.formProduct.patchValue({ date_revision: '' });
       return of({ invalidDate: true });
     };
   }
@@ -186,17 +245,19 @@ export class FormProductComponent {
     });
   }
 
-  getErrorMessage(controlName: string): string {
+  getErrorMessage(controlName: string, manual = false): string {
     const control = this.formProduct.get(controlName);
-    if (controlName === 'date_release') {
-    }
+
     if (control && control.invalid && control.touched) {
       const errorKeys = Object.keys(control.errors || {}) as Array<string>;
       const firstErrorKey = errorKeys[0];
-      console.log(controlName, firstErrorKey, control.errors);
       if (firstErrorKey) {
         return this.errorMessages[controlName][firstErrorKey];
       }
+    }
+
+    if (manual) {
+      return this.errorMessages[controlName]['exist'];
     }
     return '';
   }

@@ -6,7 +6,10 @@ interface ErrorMessages {
 export const ERROR_MESSAGES: ErrorMessages = {
   id: {
     required: 'Este campo es requerido.',
-    pattern: 'ID no válido. Ejemplo: xxxx-lp',
+    minlength: 'ID debe tener al menos 3 caracteres.',
+    maxlength: 'ID debe tener como máximo 10 caracteres.',
+    pattern: 'El ID no puede contener espacios.',
+    exist: 'El ID ya está registrado.',
   },
   name: {
     required: 'Este campo es requerido.',
@@ -28,6 +31,7 @@ export const ERROR_MESSAGES: ErrorMessages = {
   },
   date_revision: {
     required: 'Este campo es requerido.',
-    invalidDate: 'Debes elegir una fecha un año posterior la fecha de liberación.',
+    invalidDate:
+      'Debes elegir una fecha un año posterior la fecha de liberación.',
   },
 };

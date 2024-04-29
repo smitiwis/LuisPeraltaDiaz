@@ -31,4 +31,10 @@ export class ProductService {
       observe: 'response',
     });
   }
+
+  existProductById(id: string): Observable<HttpResponse<boolean>> {
+    return this.http.get<boolean>(`${this.url}/verification?id=${id}`, {
+      observe: 'response',
+    });
+  }
 }

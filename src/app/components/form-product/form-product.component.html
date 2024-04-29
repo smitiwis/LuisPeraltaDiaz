@@ -4,7 +4,7 @@
       <input-bk
         formControlName="id"
         label="ID*"
-        [error]="getErrorMessage('id')"
+        [error]="getErrorMessage('id') || messageErrorInputId()"
         [loading]="loadingForm()"
         [disabled]="isFormToEdit()"
         [focus]="focusFirtInput()"
