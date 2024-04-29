@@ -39,6 +39,7 @@ export class FormProductComponent {
 
   @Input() set productToEdit(value: Product_I | null) {
     if (value !== null) {
+      this.getProductToEdit.set(value);
       this.isFormToEdit.set(true);
       this.cargarDatosEnFormulario(value);
     }
@@ -58,16 +59,17 @@ export class FormProductComponent {
 
   // FORMULARIO
   formProduct!: FormGroup;
-  errorMessages = ERROR_MESSAGES;
-
+  
   // SEÑALES
   loadingForm = signal(false);
   loadginButton = signal(false);
   isFormToEdit = signal(false);
+  getProductToEdit = signal<Product_I | null>(null);
   focusFirtInput = signal(false);
   focusSecondInput = signal(false);
   focusInput = signal(false);
   messageErrorInputId = signal('');
+  errorMessages = signal(ERROR_MESSAGES);
 
   // INYECCION DE DEPENDENCIAS
   formBuilder = inject(FormBuilder);
@@ -219,8 +221,28 @@ export class FormProductComponent {
         date_revision: formatDateHelper(dateToRevision),
       });
 
-      if (selectedDate < currentDate) {
+      if (!this.isFormToEdit() && (selectedDate < currentDate)) {
         return of({ invalidDate: true });
+      }
+
+      if(this.isFormToEdit()){
+        // CUANDO QUIERES ACTUALIZAR UN PRODUCTO
+        const dateReleaseToEdit = new Date(this.getProductToEdit()!.date_release);
+        dateReleaseToEdit.setDate(dateReleaseToEdit.getDate() + 1);
+        const day = dateReleaseToEdit.getDate();
+        const month = dateReleaseToEdit.getMonth();
+        const year = dateReleaseToEdit.getFullYear();
+        
+        if (selectedDate < dateReleaseToEdit) {
+          this.errorMessages.set({
+            ...this.errorMessages(),
+            date_release:{
+              ...this.errorMessages()['date_release'],
+              invalidDate: `Debes elegir una fecha mayor o igual a ${day}/${month+1}/${year}.`
+            }
+          })
+          return of({ invalidDate: true });
+        }
       }
 
       return of(null);
@@ -254,12 +276,12 @@ export class FormProductComponent {
       const errorKeys = Object.keys(control.errors || {}) as Array<string>;
       const firstErrorKey = errorKeys[0];
       if (firstErrorKey) {
-        return this.errorMessages[controlName][firstErrorKey];
+        return this.errorMessages()[controlName][firstErrorKey];
       }
     }
 
     if (manual) {
-      return this.errorMessages[controlName]['exist'];
+      return this.errorMessages()[controlName]['exist'];
     }
     return '';
   }
