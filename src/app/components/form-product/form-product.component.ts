@@ -75,11 +75,12 @@ export class FormProductComponent {
 
   ngOnInit(): void {
     this.initForm();
-    this.subscribeToFormChanges();
+    this.subscribeToInputId();
   }
 
-  subscribeToFormChanges(): void {
+  subscribeToInputId(): void {
     const idControl = this.formProduct.get('id');
+
     if (idControl) {
       this.inputId$ = idControl.valueChanges.pipe(
         map((id: string) => {
@@ -203,25 +204,22 @@ export class FormProductComponent {
       if (!dateReleaseControl.value) return of(null);
 
       const currentDate = new Date();
-      let selectedDate = dateReleaseControl.value;
-
-      selectedDate = new Date(selectedDate);
+      const selectedDate = new Date(dateReleaseControl.value);
       selectedDate.setDate(selectedDate.getDate() + 1);
 
-      if (currentDate <= selectedDate) {
-        // PASO LIMPIO LAS VALIDACIONES DE LA FECHA DE REVISION
-        selectedDate.setFullYear(selectedDate.getFullYear() + 1);
-        selectedDate.setDate(selectedDate.getDate() - 1);
+      const dateToRevision = new Date(selectedDate);
+      dateToRevision.setFullYear(dateToRevision.getFullYear() + 1);
+      dateToRevision.setDate(dateToRevision.getDate() - 1);
 
-        this.formProduct.patchValue({
-          date_revision: formatDateHelper(selectedDate),
-        });
+      this.formProduct.patchValue({
+        date_revision: formatDateHelper(dateToRevision),
+      });
 
-        return of(null);
+      if (selectedDate < currentDate) {
+        return of({ invalidDate: true });
       }
 
-      this.formProduct.patchValue({ date_revision: '' });
-      return of({ invalidDate: true });
+      return of(null);
     };
   }
 
@@ -283,6 +281,9 @@ export class FormProductComponent {
   ngOnDestroy(): void {
     if (this.productEvent) {
       this.productEvent.unsubscribe();
+    }
+    if (this.inputIdEvent) {
+      this.inputIdEvent.unsubscribe();
     }
   }
 }

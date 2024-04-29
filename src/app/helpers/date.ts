@@ -1,4 +1,4 @@
-export const formatDateHelper = (dateString: string): string => {
+export const formatDateHelper = (dateString: string | Date): string => {
   const dateRelease = new Date(dateString);
   return dateRelease.toISOString().substring(0, 10);
 };
