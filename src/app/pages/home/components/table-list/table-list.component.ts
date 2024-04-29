@@ -6,7 +6,7 @@ import {
 } from '../../../../constants/table-list';
 import { ProductService } from '../../../../services/services.service';
 import { Product_I } from '../../../../interfaces/products';
-import { Observable, Subscription, delay } from 'rxjs';
+import { Observable, Subscription, catchError, delay, of } from 'rxjs';
 import { clearWord, formatDateHelper } from '../../../../helpers/date';
 import { HttpResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
@@ -22,6 +22,7 @@ export class TableListComponent {
   // ENTRADAS
   @ViewChild('modalDeleleProduct') modalToDelete!: SwalComponent;
   @ViewChild('modalToConfirm') modalToConfirm!: SwalComponent;
+  @ViewChild('modalError') modalError!: SwalComponent;
 
   @Input()
   set productNameSearch(value: string) {
@@ -133,31 +134,25 @@ export class TableListComponent {
       return this.modalToDelete.close();
     }
 
-    // QUITAR PRODUCTO DE LA LISTA
-    const newListProducts = this.constProducts().filter(
-      (product) => product.id !== getProductToDelete.id
-    );
+    this.productService
+      .deleteProductById(getProductToDelete.id)
+      .pipe(catchError((err) => of(err)))
+      .subscribe((resp) => {
+        if (resp.status !== 200) {
+          this.modalToDelete.close();
+          this.modalError.text = resp.error;
+          this.modalError.fire();
+        } else {
+          const newListProducts = this.constProducts().filter(
+            (product) => product.id !== getProductToDelete.id
+          );
 
-    this.constProducts.set(newListProducts);
-    this.productsPerPage(newListProducts, this.showNumberProducts());
-    this.modalToDelete.close();
-    this.modalToConfirm.fire();
-    // this.productService
-    //   .deleteProductById(getProductToDelete.id)
-    //   .subscribe((resp) => {
-    //     if (resp.status !== 200) {
-    //       return console.error('Error al eliminar producto');
-    //     }
-
-    //     // QUITAR PRODUCTO DE LA LISTA
-    //     const newListProducts = this.constProducts().filter(
-    //       (product) => product.id !== getProductToDelete.id
-    //     );
-
-    //     this.constProducts.set(newListProducts);
-    //     this.productsPerPage(newListProducts, this.showNumberProducts());
-    //     this.modalToDelete.close();
-    //   });
+          this.constProducts.set(newListProducts);
+          this.productsPerPage(newListProducts, this.showNumberProducts());
+          this.modalToDelete.close();
+          this.modalToConfirm.fire();
+        }
+      });
   }
 
   // DESSUSCRIPCION DE EVENTOS
