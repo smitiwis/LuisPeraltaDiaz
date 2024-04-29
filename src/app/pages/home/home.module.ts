@@ -7,6 +7,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { SharedModule } from '../../components/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { productInterceptor } from '../../interceptors/interceptor-product';
 
 @NgModule({
   declarations: [HomeComponent, TableListComponent],
@@ -17,6 +18,6 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     ReactiveFormsModule,
     SweetAlert2Module.forRoot(),
   ],
-  providers: [provideHttpClient()],
+  providers: [provideHttpClient(withInterceptors([productInterceptor]))],
 })
 export class HomeModule {}

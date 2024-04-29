@@ -7,6 +7,7 @@ import { RoutesRegisterModule } from './routes/RegisterRouting.module';
 import { SharedModule } from '../../components/shared.module';
 
 import { RegisterComponent } from './register.component';
+import { productInterceptor } from '../../interceptors/interceptor-product';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { RegisterComponent } from './register.component';
     SharedModule,
     ReactiveFormsModule,
   ],
-  providers: [provideHttpClient()],
+  providers: [provideHttpClient(withInterceptors([productInterceptor]))],
 
 })
 export class RegisterModule { }
