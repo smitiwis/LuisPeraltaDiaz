@@ -2,13 +2,14 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product_I } from '../interfaces/products';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  headers = new HttpHeaders({ authorId: 428 });
-  url = `https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros/bp/products`;
+  headers = new HttpHeaders({ authorId: environment.AUTHOR_ID });
+  url = environment.API_PRODUCT;
 
   constructor(private http: HttpClient) {}
 
