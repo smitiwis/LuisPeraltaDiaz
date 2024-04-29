@@ -62,6 +62,7 @@ export class FormProductComponent {
 
   // SEÑALES
   loadingForm = signal(false);
+  loadginButton = signal(false);
   isFormToEdit = signal(false);
   focusFirtInput = signal(false);
   focusSecondInput = signal(false);
@@ -116,6 +117,7 @@ export class FormProductComponent {
   }
 
   onSubmit() {
+    this.loadginButton.set(true);
     if (!this.formProduct.valid) {
       return this.markAllControlsTouched(this.formProduct);
     }
@@ -126,6 +128,7 @@ export class FormProductComponent {
       this.productEvent = this.product$
         .pipe(catchError((err) => of(err)))
         .subscribe((resp) => {
+          this.loadginButton.set(false);
           if (resp.status === 200) {
             this.modalCreateSuccess.fire();
             this.modalUpdateSuccess.fire().then(() => {
@@ -141,6 +144,7 @@ export class FormProductComponent {
       this.productEvent = this.product$
         .pipe(catchError((err) => of(err)))
         .subscribe((resp) => {
+          this.loadginButton.set(false);
           if (resp.status === 200) {
             this.modalCreateSuccess.fire();
             this.modalCreateSuccess.fire().then(() => {
