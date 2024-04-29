@@ -44,10 +44,18 @@
       <td>{{ formatDate(product.date_revision) }}</td>
       <td>
         <div class="flex justify-center gap-x-2 w-[100%]">
-          <button class="btn btn--secondary btn--small" [routerLink]="'/edit/'+ product.id">
+          <button
+            class="btn btn--secondary btn--small"
+            [routerLink]="'/edit/' + product.id"
+          >
             Editar
           </button>
-          <button class="btn btn--delete btn--small">Eliminar</button>
+          <button
+            class="btn btn--delete btn--small"
+            (click)="openModalToDelete(product)"
+          >
+            Eliminar
+          </button>
         </div>
       </td>
     </tr>
@@ -64,3 +72,43 @@
     <option value="20">20</option>
   </select>
 </div>
+
+<!-- MODALES -->
+<swal #modalDeleleProduct [showConfirmButton]="false">
+  <ng-container *swalPortal="swalTargets.content">
+    <div class="mb-8">
+      <div class="text-center">¿Estás seguro de eliminar el producto?</div>
+      <div class="flex flex-col items-center gap-1 mt-5 justify-center">
+        <img
+          width="100"
+          [src]="productToDelete()?.logo"
+          [alt]="productToDelete()?.name"
+        />
+        <span class="font-bold">
+          {{ productToDelete()?.name }}
+        </span>
+      </div>
+    </div>
+    <div class="separator-top pt-5">
+      <div class="flex justify-between items-center gapx-4">
+        <button class="btn btn--secondary" type="button" (click)="modalDeleleProduct.close()">Cancelar</button>
+        <button
+          class="btn btn--primary"
+          type="button"
+          (click)="goToDeleteProduct()"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</swal>
+
+<swal
+  #modalToConfirm
+  title="¡Producto Eliminado!"
+  text=" "
+  icon="success"
+  [timer]="1000"
+  [showConfirmButton]="false"
+/>

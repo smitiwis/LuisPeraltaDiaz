@@ -1,4 +1,4 @@
-import { Component, Input, inject, signal } from '@angular/core';
+import { Component, Input, ViewChild, inject, signal } from '@angular/core';
 
 import {
   COLUMNS_LIST,
@@ -10,6 +10,7 @@ import { Observable, Subscription, delay } from 'rxjs';
 import { clearWord, formatDateHelper } from '../../../../helpers/date';
 import { HttpResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
+import { SwalComponent, SwalPortalTargets } from '@sweetalert2/ngx-sweetalert2';
 
 @Component({
   selector: 'table-list',
@@ -19,6 +20,9 @@ import { FormControl } from '@angular/forms';
 })
 export class TableListComponent {
   // ENTRADAS
+  @ViewChild('modalDeleleProduct') modalToDelete!: SwalComponent;
+  @ViewChild('modalToConfirm') modalToConfirm!: SwalComponent;
+
   @Input()
   set productNameSearch(value: string) {
     if (!value || value === '') {
@@ -47,6 +51,7 @@ export class TableListComponent {
   loading = signal(true);
   showNumberProducts = signal(this.numberProducts);
   wordSearch = signal('');
+  productToDelete = signal<Product_I | null>(null);
 
   // EVENTOS
   productList$!: Observable<HttpResponse<Product_I[]>>;
@@ -58,6 +63,7 @@ export class TableListComponent {
 
   // INJECTACCION DE DEPENDENCIAS
   productService = inject(ProductService);
+  swalTargets = inject(SwalPortalTargets);
 
   ngOnInit(): void {
     this.getProducts();
@@ -114,6 +120,44 @@ export class TableListComponent {
     }
 
     return `${this.products().length} resultado`;
+  }
+
+  openModalToDelete(products: Product_I): void {
+    this.productToDelete.set(products);
+    this.modalToDelete.fire();
+  }
+
+  goToDeleteProduct(): any {
+    const getProductToDelete = this.productToDelete();
+    if (!getProductToDelete) {
+      return this.modalToDelete.close();
+    }
+
+    // QUITAR PRODUCTO DE LA LISTA
+    const newListProducts = this.constProducts().filter(
+      (product) => product.id !== getProductToDelete.id
+    );
+
+    this.constProducts.set(newListProducts);
+    this.productsPerPage(newListProducts, this.showNumberProducts());
+    this.modalToDelete.close();
+    this.modalToConfirm.fire();
+    // this.productService
+    //   .deleteProductById(getProductToDelete.id)
+    //   .subscribe((resp) => {
+    //     if (resp.status !== 200) {
+    //       return console.error('Error al eliminar producto');
+    //     }
+
+    //     // QUITAR PRODUCTO DE LA LISTA
+    //     const newListProducts = this.constProducts().filter(
+    //       (product) => product.id !== getProductToDelete.id
+    //     );
+
+    //     this.constProducts.set(newListProducts);
+    //     this.productsPerPage(newListProducts, this.showNumberProducts());
+    //     this.modalToDelete.close();
+    //   });
   }
 
   // DESSUSCRIPCION DE EVENTOS

@@ -19,7 +19,10 @@ export class ProductService {
 
   getProducts(): Observable<HttpResponse<Product_I[]>> {
     const headers = this.headers;
-    return this.http.get<Product_I[]>(this.url, { headers, observe: 'response'});
+    return this.http.get<Product_I[]>(this.url, {
+      headers,
+      observe: 'response',
+    });
   }
 
   updateProduct(body: Product_I): Observable<Product_I> {
@@ -27,8 +30,11 @@ export class ProductService {
     return this.http.put<Product_I>(this.url, body, { headers });
   }
 
-  deleteProductById(id: string): Observable<Product_I[]> {
+  deleteProductById(id: string): Observable<HttpResponse<Product_I[]>> {
     const headers = this.headers;
-    return this.http.delete<Product_I[]>(`${this.url}?id=${id}`, { headers });
+    return this.http.delete<Product_I[]>(`${this.url}?id=${id}`, {
+      headers,
+      observe: 'response',
+    });
   }
 }

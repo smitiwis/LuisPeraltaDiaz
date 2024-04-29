@@ -1,25 +1,14 @@
 
-.ReactModal__Overlay{
-  background-color: rgba(0, 0, 0, 0.5) !important;
-  z-index: 1000;
-}
-
-.modal-generic{
-  border-radius: 8px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  right: auto;
-  bottom: auto;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  overflow: auto;
-  outline: none;
+.swal2-modal{
+  width: 372px;
   padding: 1.5rem 1rem 1.2rem;
-  width: 350px;
 
-  &--small{
-    width: 220px;
+  .swal2-html-container{
+    margin: 0;
+  }
+
+  .swal2-title{
+    font-size: 1.375em;
   }
 }
+

@@ -22,7 +22,7 @@ import { formatDateHelper } from '../../helpers/date';
 })
 export class FormProductComponent {
   // ENTRADAS Y SALIDAS DEL COMPONENTE
-  @ViewChild('deleteSwal') sweetAlert!: SwalComponent;
+  @ViewChild('modalRef') sweetAlert!: SwalComponent;
   @Input() set productToEdit(value: Product_I | null) {
     if (value !== null) {
       this.isFormToEdit.set(true);
