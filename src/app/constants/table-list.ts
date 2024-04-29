@@ -22,7 +22,7 @@ export const COLUMNS_LIST = [
   {
     key: "date_revision",
     icon: true,
-    name: "Fecha de revición",
+    name: "Fecha de revisión",
   },
   {
     key: "actions",

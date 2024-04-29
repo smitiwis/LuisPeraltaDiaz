@@ -1,4 +1,4 @@
-<form [formGroup]="miFormulario" (ngSubmit)="onSubmit()">
+<form [formGroup]="formProduct" (ngSubmit)="onSubmit()">
   <div class="contenedor-fields">
     <div class="wrapper-field">
       <input-bk
@@ -47,10 +47,11 @@
     <div class="wrapper-field">
       <input-bk
         formControlName="date_revision"
-        label="Fecha de revición*"
+        label="Fecha de revisión*"
         type="date"
         [error]="getErrorMessage('date_revision')"
         [loading]="loadingForm()"
+        [disabled]="true"
       />
     </div>
   </div>

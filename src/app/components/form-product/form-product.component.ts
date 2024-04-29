@@ -1,5 +1,12 @@
 import { Component, Input, ViewChild, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -11,7 +18,6 @@ import { ERROR_MESSAGES } from '@components/fields/input-bk/constants';
 import { ProductService } from '@services/services.service';
 import { Product_I } from '@interfaces/products';
 import { formatDateHelper } from '@helpers/date';
-
 
 @Component({
   selector: 'form-product',
@@ -40,7 +46,7 @@ export class FormProductComponent {
   product$!: Observable<HttpResponse<Product_I>>;
 
   // FORMULARIO
-  miFormulario!: FormGroup;
+  formProduct!: FormGroup;
   errorMessages = ERROR_MESSAGES;
 
   // SEÑALES
@@ -60,10 +66,10 @@ export class FormProductComponent {
   }
 
   onSubmit() {
-    if (!this.miFormulario.valid) {
-      return this.markAllControlsTouched(this.miFormulario);
+    if (!this.formProduct.valid) {
+      return this.markAllControlsTouched(this.formProduct);
     }
-    const data = this.miFormulario.value;
+    const data = this.formProduct.value;
 
     if (this.isFormToEdit()) {
       this.product$ = this.productService.updateProduct(data);
@@ -98,19 +104,70 @@ export class FormProductComponent {
     }
   }
 
-  protected initForm(): void {
-    this.miFormulario = this.formBuilder.group({
+  initForm(): void {
+    this.formProduct = this.formBuilder.group({
       id: ['', [Validators.required, Validators.pattern(/-lp$/)]],
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      logo: ['https://', [Validators.required, Validators.pattern('https?://.+')]],
-      date_release: ['', Validators.required],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(100),
+        ],
+      ],
+      description: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(200),
+        ],
+      ],
+      logo: [
+        'https://',
+        [Validators.required, Validators.pattern('https?://.+')],
+      ],
+      date_release: [
+        '',
+        Validators.required,
+        this.customDateReleaseValidator(),
+      ],
       date_revision: ['', Validators.required],
     });
   }
 
-  protected cargarDatosEnFormulario(datos: Product_I): void {
-    this.miFormulario.patchValue({
+  customDateReleaseValidator(): ValidatorFn {
+    return (formGroup: AbstractControl): Observable<ValidationErrors | null> => {
+      const dateReleaseControl = formGroup;
+
+      if (!dateReleaseControl) return of(null);
+      if (!dateReleaseControl.value) return of(null);
+
+      const currentDate = new Date();
+      let selectedDate = dateReleaseControl.value;
+
+      selectedDate = new Date(selectedDate);
+      selectedDate.setDate(selectedDate.getDate() + 1);
+
+      if (currentDate <= selectedDate) {
+        // PASO LIMPIO LAS VALIDACIONES DE LA FECHA DE REVISION
+        selectedDate.setFullYear(selectedDate.getFullYear() + 1);
+        selectedDate.setDate(selectedDate.getDate() - 1);
+
+        this.formProduct.patchValue({
+          date_revision: formatDateHelper(selectedDate),
+        });
+
+        return of(null);
+      }
+
+      this.formProduct.patchValue({date_revision: ''});
+      return of({ invalidDate: true });
+    };
+  }
+
+  cargarDatosEnFormulario(datos: Product_I): void {
+    this.formProduct.patchValue({
       id: datos.id,
       name: datos.name,
       description: datos.description,
@@ -120,7 +177,7 @@ export class FormProductComponent {
     });
   }
 
-  protected markAllControlsTouched(formGroup: FormGroup): void {
+  markAllControlsTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();
       if (control instanceof FormGroup) {
@@ -130,10 +187,13 @@ export class FormProductComponent {
   }
 
   getErrorMessage(controlName: string): string {
-    const control = this.miFormulario.get(controlName);
+    const control = this.formProduct.get(controlName);
+    if (controlName === 'date_release') {
+    }
     if (control && control.invalid && control.touched) {
       const errorKeys = Object.keys(control.errors || {}) as Array<string>;
       const firstErrorKey = errorKeys[0];
+      console.log(controlName, firstErrorKey, control.errors);
       if (firstErrorKey) {
         return this.errorMessages[controlName][firstErrorKey];
       }
@@ -142,8 +202,8 @@ export class FormProductComponent {
   }
 
   resetForm(): void {
-    this.miFormulario.patchValue({
-      id: this.isFormToEdit() ? this.miFormulario.value.id : '',
+    this.formProduct.patchValue({
+      id: this.isFormToEdit() ? this.formProduct.value.id : '',
       name: '',
       description: '',
       logo: 'https://',
